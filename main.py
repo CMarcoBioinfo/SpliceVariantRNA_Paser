@@ -218,22 +218,20 @@ def main():
                 run_dir = os.path.dirname(values["-RUN-"])
                 run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
                 qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                internal = f"fastq_raw/{run_base}.html"
-                open_html_from_zip(qc_zip, internal, window, "FASTQ Raw QC")
+                open_html_from_zip(qc_zip, "fastq_raw/", window, "FASTQ Raw QC")
+
 
             if event == "-QC-TRIM-":
                 run_dir = os.path.dirname(values["-RUN-"])
                 run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
                 qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                internal = f"fastq_trimmed/{run_base}.html"
-                open_html_from_zip(qc_zip, internal, window, "FASTQ Trimmed QC")
+                open_html_from_zip(qc_zip, "fastq_trimmed/", window, "FASTQ Trimmed QC")
 
             if event == "-QC-BAM-":
                 run_dir = os.path.dirname(values["-RUN-"])
                 run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
                 qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                internal = f"BAM/Homo_sapiens.GRCh37.dna.primary_assembly.chr/{run_base}.html"
-                open_html_from_zip(qc_zip, internal, window, "BAM QC")
+                open_html_from_zip(qc_zip, "BAM/", window, "BAM QC")
 
         
     window.close() 
