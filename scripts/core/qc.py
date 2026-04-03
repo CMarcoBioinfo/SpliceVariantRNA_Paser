@@ -4,6 +4,7 @@ import webbrowser
 import tempfile
 import threading
 import time
+import shutil
 
 
 def open_html_from_zip(zip_path, folder, window, label):
