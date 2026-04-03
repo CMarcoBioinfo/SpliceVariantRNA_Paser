@@ -8,6 +8,20 @@ from scripts.core.orchestrator import process_sample
 from scripts.core.qc import open_html_from_zip
 from scripts.ui.sample_window import open_patient_window
 
+
+
+import ctypes
+import sys
+
+def open_console():
+    # Ouvre une console Windows
+    ctypes.windll.kernel32.AllocConsole()
+    # Redirige stdout et stderr vers la console
+    sys.stdout = open("CONOUT$", "w")
+    sys.stderr = open("CONOUT$", "w")
+
+open_console()
+
 # --------------------------
 # UTILITAIRES
 # --------------------------
