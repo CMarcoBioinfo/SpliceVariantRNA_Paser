@@ -228,27 +228,27 @@ def main():
         # 5) Lancement des contrôle qualité
         # --------------------------
 
-            if event == "-QC-RAW-":
-                run_dir = os.path.dirname(values["-RUN-"])
-                run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
-                qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                print(qc_zip)
-                open_html_from_zip(qc_zip, "fastq_raw/", window, "FASTQ Raw QC")
+        if event == "-QC-RAW-":
+            run_dir = os.path.dirname(values["-RUN-"])
+            run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
+            qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
+            print(qc_zip)
+            open_html_from_zip(qc_zip, "fastq_raw/", window, "FASTQ Raw QC")
 
 
-            if event == "-QC-TRIM-":
-                run_dir = os.path.dirname(values["-RUN-"])
-                run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
-                qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                print(qc_zip)
-                open_html_from_zip(qc_zip, "fastq_trimmed/", window, "FASTQ Trimmed QC")
+        if event == "-QC-TRIM-":
+            run_dir = os.path.dirname(values["-RUN-"])
+            run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
+            qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
+            print(qc_zip)
+            open_html_from_zip(qc_zip, "fastq_trimmed/", window, "FASTQ Trimmed QC")
 
-            if event == "-QC-BAM-":
-                run_dir = os.path.dirname(values["-RUN-"])
-                run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
-                qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
-                print(qc_zip)
-                open_html_from_zip(qc_zip, "BAM/", window, "BAM QC")
+        if event == "-QC-BAM-":
+            run_dir = os.path.dirname(values["-RUN-"])
+            run_base = os.path.basename(values["-RUN-"]).replace("_recap.zip", "")
+            qc_zip = os.path.join(run_dir, f"{run_base}_qc.zip")
+            print(qc_zip)
+            open_html_from_zip(qc_zip, "BAM/", window, "BAM QC")
 
         
     window.close() 
