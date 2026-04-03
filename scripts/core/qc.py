@@ -6,6 +6,7 @@ import threading
 import time
 import shutil
 
+
 def open_html_from_zip(zip_path, folder, window, label):
     try:
         with zipfile.ZipFile(zip_path, "r") as z:
@@ -53,6 +54,7 @@ def open_html_from_zip(zip_path, folder, window, label):
                     os.remove(html_path)
                 except:
                     pass
+
                 data_dir = os.path.join(tmp_dir, os.path.basename(data_prefix))
                 if os.path.exists(data_dir):
                     shutil.rmtree(data_dir, ignore_errors=True)
