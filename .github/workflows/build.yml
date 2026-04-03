@@ -27,7 +27,7 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed main.py --hidden-import yaml --add-data "scripts/bio/motifs_data.yaml;scripts/bio" --add-data "scripts/bio/clinical_thresholds.yaml;scripts/bio"
+        pyinstaller --onefile --windowed main.py
 
     - name: Show dist folder
       run: |
@@ -41,6 +41,6 @@ jobs:
     - name: Upload EXE artifact
       uses: actions/upload-artifact@v4
       with:
-        name: trgt-parser-exe
+        name: SpliceVariantRNA_Parser
         path: dist/main.exe
         compression-level: 0
