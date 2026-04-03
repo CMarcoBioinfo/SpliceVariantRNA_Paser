@@ -24,6 +24,7 @@ jobs:
         pip install pyinstaller
         pip install PySimpleGUI-4-foss
         pip install pyyaml
+        pip install pandas
 
     - name: Build EXE
       run: |
