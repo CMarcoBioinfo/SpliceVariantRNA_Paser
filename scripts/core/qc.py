@@ -5,12 +5,20 @@ import tempfile
 import threading
 import time
 
-def open_html_from_zip(zip_path, internal_html, window, label):
+def open_html_from_zip(zip_path, folder, window, label):
     try:
         with zipfile.ZipFile(zip_path, "r") as z:
-            if internal_html not in z.namelist():
+            # Trouver un fichier HTML dans le dossier demandé
+            html_candidates = [
+                name for name in z.namelist()
+                if name.startswith(folder) and name.endswith(".html")
+            ]
+
+            if not html_candidates:
                 window["-STATUS-"].update(f"{label} introuvable.", text_color="red")
                 return
+
+            internal_html = html_candidates[0]  # On prend le premier
 
             tmp_dir = os.path.join(tempfile.gettempdir(), ".tmp_qc_html")
             os.makedirs(tmp_dir, exist_ok=True)
@@ -40,13 +48,12 @@ def open_html_from_zip(zip_path, internal_html, window, label):
                     os.remove(html_path)
                 except:
                     pass
-                # Supprimer le dossier _data
                 data_dir = os.path.join(tmp_dir, os.path.basename(data_prefix))
                 if os.path.exists(data_dir):
-                    import shutil
                     shutil.rmtree(data_dir, ignore_errors=True)
 
             threading.Thread(target=cleanup, daemon=True).start()
 
     except Exception as e:
         window["-STATUS-"].update(f"Erreur QC : {e}", text_color="red")
+
