@@ -38,13 +38,12 @@ def open_html_from_zip(zip_path, folder, window, label):
 
             window["-STATUS-"].update(f"{label} ouvert.", text_color="green")
 
-            # --- OUVERTURE + ATTENTE FERMETURE (Windows) ---
+            # OUVERTURE + ATTENTE FERMETURE
             cmd = f'start "" /WAIT "{html_path}"'
             subprocess.call(cmd, shell=True)
 
-            # --- SUPPRESSION APRÈS FERMETURE ---
+            # SUPPRESSION APRÈS FERMETURE
             shutil.rmtree(tmp_dir, ignore_errors=True)
 
     except Exception as e:
         window["-STATUS-"].update(f"Erreur QC : {e}", text_color="red")
-
