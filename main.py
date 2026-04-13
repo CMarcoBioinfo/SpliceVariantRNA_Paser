@@ -8,7 +8,7 @@ from scripts.core.orchestrator import process_sample
 from scripts.core.qc import open_html_from_zip
 from scripts.ui.sample_window import open_patient_window
 
-
+GLOBAL_QC_TMP = tempfile.mkdtemp(prefix="qc_session_")
 
 import ctypes
 import sys
@@ -83,6 +83,7 @@ def main():
         event, values = window.read()
 
         if event == sg.WINDOW_CLOSED:
+            shutil.rmtree(GLOBAL_QC_TMP, ignore_errors=True)
             break
         
         # --------------------------
