@@ -4,6 +4,12 @@ import tempfile
 import shutil
 import subprocess
 
+import os
+import zipfile
+import tempfile
+import shutil
+import subprocess
+
 def open_html_from_zip(zip_path, folder, window, label):
     try:
         with zipfile.ZipFile(zip_path, "r") as z:
@@ -20,8 +26,10 @@ def open_html_from_zip(zip_path, folder, window, label):
 
             internal_html = html_candidates[0]
 
-            # Dossier temporaire unique
+            # Dossier temporaire UNIQUE et COHÉRENT
             tmp_dir = tempfile.mkdtemp(prefix="qc_tmp_")
+
+            print(f"[DEBUG] Extraction dans : {tmp_dir}")
 
             # Extraction du HTML
             html_name = os.path.basename(internal_html)
@@ -36,14 +44,11 @@ def open_html_from_zip(zip_path, folder, window, label):
                 if name.startswith(data_prefix):
                     z.extract(name, tmp_dir)
 
-            window["-STATUS-"].update(f"{label} ouvert.", text_color="green")
+            window["-STATUS-"].update(f"{label} extrait.", text_color="green")
 
-            # OUVERTURE + ATTENTE FERMETURE
-            cmd = f'start "" /WAIT "{html_path}"'
-            subprocess.call(cmd, shell=True)
-
-            # SUPPRESSION APRÈS FERMETURE
-            shutil.rmtree(tmp_dir, ignore_errors=True)
+            # OUVERTURE SANS SUPPRESSION (pour test)
+            subprocess.Popen(f'explorer "{html_path}"')
 
     except Exception as e:
         window["-STATUS-"].update(f"Erreur QC : {e}", text_color="red")
+
