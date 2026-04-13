@@ -3,12 +3,7 @@ import zipfile
 import tempfile
 import shutil
 import subprocess
-
-import os
-import zipfile
-import tempfile
-import shutil
-import subprocess
+from main import GLOBAL_QC_TMP
 
 def open_html_from_zip(zip_path, folder, window, label):
     try:
@@ -27,8 +22,8 @@ def open_html_from_zip(zip_path, folder, window, label):
             internal_html = html_candidates[0]
 
             # Dossier temporaire UNIQUE et COHÉRENT
-            tmp_dir = tempfile.mkdtemp(prefix="qc_tmp_")
-
+            tmp_dir = os.path.join(GLOBAL_QC_TMP, label.replace(" ", "_"))
+            os.makedirs(tmp_dir, exist_ok=True)
             print(f"[DEBUG] Extraction dans : {tmp_dir}")
 
             # Extraction du HTML
