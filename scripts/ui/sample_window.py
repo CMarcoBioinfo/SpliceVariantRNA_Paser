@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from scripts.core.qc import open_html_from_zip
 
 COLUMNS_BY_SOURCE = {
     "Statistical": ["Gene", "Event", "Position", "Depth", "PSI-like", "p-value", "nbSignificantSamples"],
@@ -9,29 +10,26 @@ COLUMNS_BY_SOURCE = {
 }
 
 def normalize(s):
-    """Normalise une chaîne pour correspondre aux clés internes."""
     return s.strip().replace(" ", "").lower()
 
 def events_to_table(events, columns):
     return [[ev.get(col, "") for col in columns] for ev in events]
 
-def open_patient_window(events):
+def open_patient_window(events, patient_id, qc_zip, global_tmp):
     sg.theme("SystemDefault")
 
-    # Normalisation des sources dans les events
+    # Normalisation des sources
     for ev in events:
         ev["Source"] = normalize(ev["Source"])
 
-    # Normalisation des clés du dictionnaire
     COLUMNS_NORM = { normalize(k): v for k, v in COLUMNS_BY_SOURCE.items() }
 
-    # Pré-filtrage des events par catégorie
     events_by_cat = {
         cat: [ev for ev in events if ev["Source"] == cat]
         for cat in COLUMNS_NORM.keys()
     }
 
-    # Création des tabs
+    # Tabs
     tabs = []
     for original_name, cols in COLUMNS_BY_SOURCE.items():
         cat_norm = normalize(original_name)
@@ -47,7 +45,6 @@ def open_patient_window(events):
             num_rows=12
         )
 
-        # IMPORTANT : clé du tab = "-TAB-statistical-"
         tabs.append(sg.Tab(original_name, [[table]], key=f"-TAB-{cat_norm}-"))
 
     tab_group = sg.TabGroup(
@@ -58,21 +55,24 @@ def open_patient_window(events):
         enable_events=True
     )
 
+    # Layout avec titre personnalisé + bouton QC
     layout = [
         [tab_group],
         [
             sg.Frame(
-                "Détails de l'événement",
+                f"Détails {patient_id}",
                 [[sg.Multiline("", key="-DETAILS-", size=(80, 15), disabled=True)]],
                 expand_x=True,
                 expand_y=True
             )
+        ],
+        [
+            sg.Button("Voir QC", key="-QC-OPEN-", size=(12,1))
         ]
     ]
 
-    window = sg.Window("SpliceVariantRNA Viewer", layout, resizable=True)
+    window = sg.Window(f"SpliceVariantRNA Viewer — {patient_id}", layout, resizable=True)
 
-    # Catégorie par défaut
     current_category = normalize("Statistical")
 
     while True:
@@ -80,22 +80,25 @@ def open_patient_window(events):
         if event == sg.WIN_CLOSED:
             break
 
-        # --- Changement d'onglet ---
+        # Changement d'onglet
         if event == "-TABGROUP-":
-            tab_key = values["-TABGROUP-"]      # ex: "-TAB-statistical-"
-            current_category = tab_key[5:-1]    # enlève "-TAB-" et le dernier "-"
-            current_category = current_category.lower()
+            tab_key = values["-TABGROUP-"]
+            current_category = tab_key[5:-1].lower()
 
-        # --- Sélection d'une ligne ---
+        # Sélection d'une ligne
         if event.startswith("-TABLE-"):
             try:
                 idx = values[event][0]
                 selected_event = events_by_cat[current_category][idx]
-
                 details = "\n".join(f"{k}: {v}" for k, v in selected_event.items())
                 window["-DETAILS-"].update(details)
-
             except Exception as e:
                 print("Erreur détails:", e)
 
+        # Bouton QC
+        if event == "-QC-OPEN-":
+            # Par défaut on ouvre le BAM QC (tu peux changer)
+            open_html_from_zip(qc_zip, "BAM/", window, "BAM QC", global_tmp)
+
     window.close()
+
