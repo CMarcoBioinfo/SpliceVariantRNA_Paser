@@ -9,6 +9,8 @@ from scripts.core.qc import open_html_from_zip
 from scripts.ui.sample_window import open_patient_window
 
 GLOBAL_QC_TMP = tempfile.mkdtemp(prefix="qc_session_")
+LAST_PATIENT_SIZE = None
+LAST_PATIENT_LOCATION = None
 
 import ctypes
 import sys
@@ -219,7 +221,7 @@ def main():
 
             try:
                 events = process_sample(run_path, group_zip, sample)
-                open_patient_window(events, sample, qc_zip, run_path, group_zip, GLOBAL_QC_TMP)
+                LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION = open_patient_window(events, sample, qc_zip, run_path, group_zip, GLOBAL_QC_TMP)
                 #window["-STATUS-"].update(f"Analyse terminée pour : {sample}", text_color="green")
 
             except Exception as e:
