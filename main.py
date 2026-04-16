@@ -221,7 +221,7 @@ def main():
 
             try:
                 events = process_sample(run_path, group_zip, sample)
-                LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION = open_patient_window(events, sample, qc_zip, run_path, group_zip, GLOBAL_QC_TMP)
+                LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION = open_patient_window(events, sample, qc_zip, run_path, group_zip, GLOBAL_QC_TMP, LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION)
                 #window["-STATUS-"].update(f"Analyse terminée pour : {sample}", text_color="green")
 
             except Exception as e:
