@@ -3,6 +3,8 @@ import PySimpleGUI as sg
 from scripts.core.qc import open_html_from_zip
 from scripts.core.sashimi import open_sashimi_plot
 
+LAST_PATIENT_SIZE = None
+LAST_PATIENT_LOCATION = None
 
 COLUMNS_BY_SOURCE = {
     "Statistical": ["Gene", "Event", "Position", "Depth", "PSI-like", "p-value", "nbSignificantSamples"],
@@ -81,16 +83,42 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             sg.Button("FASTQ Trimmed QC", key="-QC-TRIM-", size=(16,1)),
             sg.Button("BAM QC", key="-QC-BAM-", size=(10,1)),
             sg.Button("Sashimi Plot", key="-SASHIMI-", size=(14,1), disabled=not sashimi_available),
+            sg.Button("Fermer", key="-CLOSE-", size=(10,1)),
         ],
         [sg.Text("", key="-STATUS-", text_color="blue")]
     ]
 
-    window = sg.Window(f"SpliceVariantRNA Viewer — {patient_id}", layout, resizable=True)
+    global LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION
+    
+    if LAST_PATIENT_SIZE is None:
+        window = sg.Window(
+            f"SpliceVariantRNA Viewer — {patient_id}",
+            layout,
+            resizable=True,
+            finalize=True
+        )
+        window.maximize()
+    else:
+        window = sg.Window(
+            f"SpliceVariantRNA Viewer — {patient_id}",
+            layout,
+            resizable=True,
+            finalize=True,
+            size=LAST_PATIENT_SIZE,
+            location=LAST_PATIENT_LOCATION
+        )
 
     current_category = normalize("Statistical")
 
     while True:
         event, values = window.read()
+        if window.TKroot is not None:
+            try:
+                LAST_PATIENT_SIZE = window.size
+                LAST_PATIENT_LOCATION = window.current_location()
+            except:
+                pass
+
         if event == sg.WIN_CLOSED:
             break
 
@@ -144,5 +172,9 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
         
             except Exception as e:
                 window["-STATUS-"].update(f"Erreur sashimi : {e}", text_color="red")
+
+        if event == "-CLOSE-":
+            break
+
 
     window.close()
