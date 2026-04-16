@@ -55,7 +55,7 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
         enable_events=True
     )
 
-    # Layout avec les 3 boutons QC
+    # Layout avec les 3 boutons QC + STATUS
     layout = [
         [tab_group],
         [
@@ -70,7 +70,8 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
             sg.Button("FASTQ Raw QC", key="-QC-RAW-", size=(14,1)),
             sg.Button("FASTQ Trimmed QC", key="-QC-TRIM-", size=(16,1)),
             sg.Button("BAM QC", key="-QC-BAM-", size=(10,1)),
-        ]
+        ],
+        [sg.Text("", key="-STATUS-", text_color="blue")]   # ← AJOUT ICI
     ]
 
     window = sg.Window(f"SpliceVariantRNA Viewer — {patient_id}", layout, resizable=True)
@@ -108,5 +109,3 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
             open_html_from_zip(qc_zip, "BAM/", window, "BAM QC", global_tmp)
 
     window.close()
-
-
