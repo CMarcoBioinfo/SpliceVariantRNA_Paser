@@ -91,6 +91,7 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             layout,
             resizable=True,
             finalize=True
+            enable_close_attempted_event=True
         )
         window.maximize()
     else:
@@ -101,6 +102,7 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             finalize=True,
             size=saved_size,
             location=saved_location
+            enable_close_attempted_event=True
         )
         
     current_category = normalize("Statistical")
@@ -168,11 +170,10 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
         
             except Exception as e:
                 window["-STATUS-"].update(f"Erreur sashimi : {e}", text_color="red")
+                
+            if event == sg.WINDOW_CLOSE_ATTEMPTED_EVENT or event == "-CLOSE-":
+                return saved_size, saved_location
 
-        if event == sg.WIN_CLOSED or event == "-CLOSE-":
-            window.close()
-            return saved_size, saved_location
 
-
-    return saved_size, saved_location
     window.close()
+    return saved_size, saved_location
