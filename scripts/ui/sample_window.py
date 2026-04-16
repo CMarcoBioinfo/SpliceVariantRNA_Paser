@@ -3,9 +3,6 @@ import PySimpleGUI as sg
 from scripts.core.qc import open_html_from_zip
 from scripts.core.sashimi import open_sashimi_plot
 
-LAST_PATIENT_SIZE = None
-LAST_PATIENT_LOCATION = None
-
 COLUMNS_BY_SOURCE = {
     "Statistical": ["Gene", "Event", "Position", "Depth", "PSI-like", "p-value", "nbSignificantSamples"],
     "Unique": ["Gene", "Event", "Position", "Depth", "PSI-like", "p-value", "nbFilteredSamples"],
@@ -20,7 +17,7 @@ def normalize(s):
 def events_to_table(events, columns):
     return [[ev.get(col, "") for col in columns] for ev in events]
 
-def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_tmp):
+def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_tmp, saved_size, saved_location):
 
     sg.theme("SystemDefault")
 
@@ -88,9 +85,7 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
         [sg.Text("", key="-STATUS-", text_color="blue")]
     ]
 
-    global LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION
-    
-    if LAST_PATIENT_SIZE is None:
+    if saved_size is None:
         window = sg.Window(
             f"SpliceVariantRNA Viewer — {patient_id}",
             layout,
@@ -104,18 +99,18 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             layout,
             resizable=True,
             finalize=True,
-            size=LAST_PATIENT_SIZE,
-            location=LAST_PATIENT_LOCATION
+            size=saved_size,
+            location=saved_location
         )
-
+        
     current_category = normalize("Statistical")
 
     while True:
         event, values = window.read()
         if window.TKroot is not None:
             try:
-                LAST_PATIENT_SIZE = window.size
-                LAST_PATIENT_LOCATION = window.current_location()
+                saved_size = window.size
+                saved_location = window.current_location()
             except:
                 pass
 
@@ -178,3 +173,4 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
 
 
     window.close()
+    return saved_size, saved_location
