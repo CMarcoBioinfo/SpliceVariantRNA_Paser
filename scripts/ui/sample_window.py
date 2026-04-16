@@ -55,7 +55,7 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
         enable_events=True
     )
 
-    # Layout avec titre personnalisé + bouton QC
+    # Layout avec les 3 boutons QC
     layout = [
         [tab_group],
         [
@@ -67,7 +67,9 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
             )
         ],
         [
-            sg.Button("Voir QC", key="-QC-OPEN-", size=(12,1))
+            sg.Button("FASTQ Raw QC", key="-QC-RAW-", size=(14,1)),
+            sg.Button("FASTQ Trimmed QC", key="-QC-TRIM-", size=(16,1)),
+            sg.Button("BAM QC", key="-QC-BAM-", size=(10,1)),
         ]
     ]
 
@@ -95,10 +97,16 @@ def open_patient_window(events, patient_id, qc_zip, global_tmp):
             except Exception as e:
                 print("Erreur détails:", e)
 
-        # Bouton QC
-        if event == "-QC-OPEN-":
-            # Par défaut on ouvre le BAM QC (tu peux changer)
+        # --- Boutons QC ---
+        if event == "-QC-RAW-":
+            open_html_from_zip(qc_zip, "fastq_raw/", window, "FASTQ Raw QC", global_tmp)
+
+        if event == "-QC-TRIM-":
+            open_html_from_zip(qc_zip, "fastq_trimmed/", window, "FASTQ Trimmed QC", global_tmp)
+
+        if event == "-QC-BAM-":
             open_html_from_zip(qc_zip, "BAM/", window, "BAM QC", global_tmp)
 
     window.close()
+
 
