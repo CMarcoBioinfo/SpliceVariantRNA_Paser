@@ -174,6 +174,5 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             return saved_size, saved_location
 
 
-
-    window.close()
     return saved_size, saved_location
+    window.close()
