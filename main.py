@@ -113,8 +113,7 @@ def main():
                 samples = list_samples(run_path, group_zip)
                 for s in samples:
                     all_samples[s] = group_zip
-            
-            window.metadata = {}
+                    
             window.metadata["all_samples"] = all_samples
 
             window["-GROUP-"].update(values=groups)
