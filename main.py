@@ -53,6 +53,7 @@ def list_samples(run_zip, group_zip):
 # --------------------------
 
 def main():
+    global LAST_PATIENT_SIZE, LAST_PATIENT_LOCATION
     sg.theme("SystemDefault")
 
     layout = [
