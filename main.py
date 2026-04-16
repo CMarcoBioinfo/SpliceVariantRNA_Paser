@@ -114,8 +114,9 @@ def main():
                 for s in samples:
                     all_samples[s] = group_zip
                     
+            window.metadata = {}
             window.metadata["all_samples"] = all_samples
-
+    
             window["-GROUP-"].update(values=groups)
             window["-STATUS-"].update(f"{len(groups)} groupes trouvés", text_color="blue")
             
@@ -154,9 +155,8 @@ def main():
             samples = list_samples(run_path, group_zip)
             group_name = os.path.basename(group_zip)
 
-            window.metadata["all_samples"] = samples
-            window.metadata["qc_zip"] = qc_zip
-            window.metadata["global_tmp"] = GLOBAL_QC_TMP
+            window.metadata = {}
+            window.metadata["all_samples"] = all_samples
             window["-SAMPLE-"].update(values=samples)
 
 
