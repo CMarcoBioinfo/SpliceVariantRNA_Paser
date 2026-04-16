@@ -107,6 +107,7 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
 
     while True:
         event, values = window.read()
+        
         if window.TKroot is not None:
             try:
                 saved_size = window.size
@@ -168,8 +169,10 @@ def open_patient_window(events, patient_id, qc_zip, run_path, group_zip, global_
             except Exception as e:
                 window["-STATUS-"].update(f"Erreur sashimi : {e}", text_color="red")
 
-        if event == "-CLOSE-":
-            break
+        if event == sg.WIN_CLOSED or event == "-CLOSE-":
+            window.close()
+            return saved_size, saved_location
+
 
 
     window.close()
