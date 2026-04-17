@@ -87,6 +87,7 @@ def main():
 
         if event == sg.WINDOW_CLOSED:
             shutil.rmtree(GLOBAL_QC_TMP, ignore_errors=True)
+            shutil.rmtree(GLOBAL_SASHIMI_TMP, ignore_errors=True)
             break
         
         # --------------------------
