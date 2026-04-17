@@ -45,10 +45,6 @@ def find_sashimi_pdf(run_sashimi_zip, group_name, patient_id, sashimi_filename):
 
 
 def open_sashimi_plot(run_sashimi_zip, group_name, patient_id, sashimi_filename, window, global_tmp):
-    """
-    Extrait un sashimi PDF dans un dossier temporaire et l'ouvre.
-    """
-
     try:
         pdf_bytes = find_sashimi_pdf(run_sashimi_zip, group_name, patient_id, sashimi_filename)
 
@@ -56,7 +52,6 @@ def open_sashimi_plot(run_sashimi_zip, group_name, patient_id, sashimi_filename,
             window["-STATUS-"].update("Sashimi introuvable.", text_color="red")
             return
 
-        # Dossier temporaire
         tmp_dir = os.path.join(global_tmp, "sashimi_plots", patient_id)
         os.makedirs(tmp_dir, exist_ok=True)
 
@@ -67,18 +62,7 @@ def open_sashimi_plot(run_sashimi_zip, group_name, patient_id, sashimi_filename,
 
         window["-STATUS-"].update("Sashimi extrait.", text_color="green")
 
-        # Ouvrir dans le navigateur
         subprocess.Popen(f'explorer "{pdf_path}"')
-
-        # Suppression automatique après 30s (comme TRGT)
-        def cleanup(path):
-            time.sleep(30)
-            try:
-                os.remove(path)
-            except FileNotFoundError:
-                pass
-
-        threading.Thread(target=cleanup, args=(pdf_path,), daemon=True).start()
 
     except Exception as e:
         window["-STATUS-"].update(f"Erreur sashimi : {e}", text_color="red")
